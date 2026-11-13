@@ -4,6 +4,7 @@
 
 - Node.js: [https://nodejs.org/en/download](https://nodejs.org/en/download)
 - Git: [https://git-scm.com/install/](https://git-scm.com/install/)
+- MySQL: [https://dev.mysql.com/downloads/](https://dev.mysql.com/downloads/) hoặc thông qua [Docker](https://docs.docker.com/desktop/setup/install/windows-install/)
 
 Kiểm tra:
 
@@ -33,3 +34,5 @@ cd web
 npm install
 npm run dev
 ```
+
+Preview: http://localhost:5173
