@@ -1,3 +1,4 @@
+SET NAMES utf8mb4;
 USE hrm;
 
 -- Tài khoản mặc định: admin / admin123, hr / hr123
