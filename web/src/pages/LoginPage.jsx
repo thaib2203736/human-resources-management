@@ -1,5 +1,16 @@
 import { useState } from 'react';
+import { AlertCircle, LockKeyhole } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { apiFetch } from '@/lib/api';
 
 export function LoginPage({ onSuccess }) {
@@ -27,55 +38,54 @@ export function LoginPage({ onSuccess }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/40 p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-lg border bg-card p-6 shadow-sm space-y-4"
-      >
-        <div>
-          <h1 className="text-xl font-semibold">Đăng nhập hệ thống</h1>
-          <p className="text-sm text-muted-foreground">Hệ thống quản lý nhân sự</p>
-        </div>
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <div className="mb-1 inline-flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <LockKeyhole className="size-4" />
+          </div>
+          <CardTitle className="text-xl">Đăng nhập hệ thống</CardTitle>
+          <CardDescription>Hệ thống quản lý nhân sự doanh nghiệp</CardDescription>
+        </CardHeader>
 
-        {error && (
-          <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
-            {error}
-          </p>
-        )}
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="size-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-        <div className="space-y-1.5">
-          <label htmlFor="username" className="text-sm font-medium">
-            Tên đăng nhập
-          </label>
-          <input
-            id="username"
-            type="text"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="admin"
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-          />
-        </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="username">Tên đăng nhập</Label>
+              <Input
+                id="username"
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="admin hoặc hr"
+              />
+            </div>
 
-        <div className="space-y-1.5">
-          <label htmlFor="password" className="text-sm font-medium">
-            Mật khẩu
-          </label>
-          <input
-            id="password"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-          />
-        </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="password">Mật khẩu</Label>
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+              />
+            </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-        </Button>
-      </form>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
