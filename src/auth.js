@@ -1,3 +1,4 @@
+import './env.js';
 import crypto from 'node:crypto';
 
 // shortcut: dùng secret mặc định khi dev local; đặt AUTH_SECRET trong .env trước khi triển khai chung
@@ -54,4 +55,15 @@ export function requireAuth(req, res, next) {
   }
   req.user = user;
   return next();
+}
+
+export function requireRole(...roles) {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.vai_tro)) {
+      return res
+        .status(403)
+        .json({ error: 'Chỉ quản trị viên (Admin) mới có quyền thực hiện thao tác này' });
+    }
+    return next();
+  };
 }

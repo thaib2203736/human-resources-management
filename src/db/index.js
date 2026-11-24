@@ -1,3 +1,4 @@
+import '../env.js';
 import mysql from 'mysql2/promise';
 
 export const pool = mysql.createPool({
@@ -8,6 +9,7 @@ export const pool = mysql.createPool({
   password: process.env.DATABASE_PASSWORD || 'password',
   database: process.env.DATABASE_NAME || 'hrm',
   charset: 'utf8mb4',
+  dateStrings: ['DATE'],
 });
 
 export async function query(sql, params = []) {
