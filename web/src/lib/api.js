@@ -1,5 +1,6 @@
 const TOKEN_KEY = 'hrm_token';
 const USER_KEY = 'hrm_user';
+const unauthorizedListeners = new Set();
 
 export function getSession() {
   const token = localStorage.getItem(TOKEN_KEY);
@@ -22,6 +23,13 @@ export function clearSession() {
   localStorage.removeItem(USER_KEY);
 }
 
+export function onUnauthorized(listener) {
+  unauthorizedListeners.add(listener);
+  return () => {
+    unauthorizedListeners.delete(listener);
+  };
+}
+
 export async function apiFetch(path, options = {}) {
   const session = getSession();
   const headers = {
@@ -35,8 +43,11 @@ export async function apiFetch(path, options = {}) {
   const res = await fetch(path, { ...options, headers });
   const data = await res.json().catch(() => ({}));
 
-  if (res.status === 401) {
+  if (res.status === 401 && !path.startsWith('/api/v1/auth/login')) {
     clearSession();
+    for (const listener of unauthorizedListeners) {
+      listener();
+    }
   }
   if (!res.ok) {
     throw new Error(data.error || `Lỗi ${res.status}`);

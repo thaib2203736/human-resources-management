@@ -133,4 +133,28 @@
   .no-print {
     display: none !important;
   }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  [data-slot="card"],
+  [data-slot="table-container"] {
+    overflow: visible !important;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    white-space: normal !important;
+    padding: 0.375rem 0.5rem !important;
+    font-size: 11px;
+  }
+  tr {
+    break-inside: avoid;
+  }
 }
