@@ -269,7 +269,7 @@ export function EmployeesPage({ user }) {
 
       <Card size="sm" className="no-print">
         <CardContent className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1 min-w-[220px]">
+          <div className="relative flex-1 min-w-55">
             <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="text"
