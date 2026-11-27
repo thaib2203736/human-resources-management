@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { query as defaultQuery } from '../db/index.js';
 import { requireAuth, requireRole } from '../auth.js';
 import {
-  computeTotalSalary,
   httpError,
   mapDbError,
   parseCode,
@@ -88,24 +87,16 @@ export function createSalariesRouter({ query = defaultQuery } = {}) {
   }
 
   async function resolveTotalSalary(data) {
-    const refRows = await query(
-      `SELECT cc.so_ngay_lam_viec, cv.he_so_luong
-       FROM cham_cong cc
-       JOIN nhan_vien nv ON cc.ma_nhan_vien = nv.ma_nhan_vien
-       JOIN chuc_vu cv ON nv.ma_chuc_vu = cv.ma_chuc_vu
-       WHERE cc.ma_cham_cong = ?
-       LIMIT 1`,
-      [data.ma_cham_cong]
-    );
-    if (!refRows[0]) {
+    const rows = await query('SELECT fn_tinh_tong_luong(?, ?, ?) AS tong_luong', [
+      data.ma_cham_cong,
+      data.luong_can_ban,
+      data.phu_cap,
+    ]);
+    const raw = rows[0]?.tong_luong;
+    if (raw === null || raw === undefined) {
       throw httpError(400, 'Bản ghi chấm công được chọn không tồn tại');
     }
-    return computeTotalSalary({
-      luong_can_ban: data.luong_can_ban,
-      he_so_luong: refRows[0].he_so_luong,
-      so_ngay_lam_viec: refRows[0].so_ngay_lam_viec,
-      phu_cap: data.phu_cap,
-    });
+    return Number(raw);
   }
 
   router.get('/', async (req, res, next) => {

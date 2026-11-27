@@ -171,21 +171,38 @@ test('employees router validates phone/date on POST, exercises fetchOne, allows 
   });
 
   await withServer(app, async (req) => {
-    const badPhone = await req('/api/v1/employees', {
-      method: 'POST',
+    for (const invalidPhone of ['123abc', '091234567', '091234567890']) {
+      const badPhone = await req('/api/v1/employees', {
+        method: 'POST',
+        token: HR_TOKEN,
+        body: {
+          ma_nhan_vien: 'NV07',
+          ten_nhan_vien: 'Lê Minh Tuấn',
+          ngay_sinh: '1998-03-15',
+          dia_chi: 'Cần Thơ',
+          so_dien_thoai: invalidPhone,
+          ma_phong_ban: 'PB01',
+          ma_chuc_vu: 'CV03',
+          nam_vao_lam: 2025,
+        },
+      });
+      assert.equal(badPhone.status, 400);
+    }
+
+    const updated11Digits = await req('/api/v1/employees/NV07', {
+      method: 'PUT',
       token: HR_TOKEN,
       body: {
-        ma_nhan_vien: 'NV07',
         ten_nhan_vien: 'Lê Minh Tuấn',
         ngay_sinh: '1998-03-15',
         dia_chi: 'Cần Thơ',
-        so_dien_thoai: '123abc',
+        so_dien_thoai: '09123456789',
         ma_phong_ban: 'PB01',
         ma_chuc_vu: 'CV03',
         nam_vao_lam: 2025,
       },
     });
-    assert.equal(badPhone.status, 400);
+    assert.equal(updated11Digits.status, 200);
 
     const created = await req('/api/v1/employees', {
       method: 'POST',

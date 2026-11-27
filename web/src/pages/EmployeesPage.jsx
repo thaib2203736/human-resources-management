@@ -489,12 +489,16 @@ export function EmployeesPage({ user }) {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="emp-phone">Số điện thoại (9–15 số) *</Label>
+                <Label htmlFor="emp-phone">Số điện thoại (10–11 số) *</Label>
                 <Input
                   id="emp-phone"
                   type="tel"
+                  inputMode="numeric"
                   required
-                  maxLength={15}
+                  minLength={10}
+                  maxLength={11}
+                  pattern="[0-9]{10,11}"
+                  title="Số điện thoại phải gồm từ 10 đến 11 chữ số"
                   value={form.so_dien_thoai}
                   onChange={(e) => setForm({ ...form, so_dien_thoai: e.target.value })}
                   placeholder="0901234567"

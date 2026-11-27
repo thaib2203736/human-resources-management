@@ -174,7 +174,7 @@
         <mxCell id="t_nv_c4" parent="t_nv" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;html=1;" value="dia_chi : VARCHAR(255) NOT NULL" vertex="1">
           <mxGeometry height="26" width="400" y="116" as="geometry" />
         </mxCell>
-        <mxCell id="t_nv_c5" parent="t_nv" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;html=1;" value="so_dien_thoai : VARCHAR(15) NOT NULL" vertex="1">
+        <mxCell id="t_nv_c5" parent="t_nv" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;html=1;" value="so_dien_thoai : VARCHAR(11) NOT NULL" vertex="1">
           <mxGeometry height="26" width="400" y="142" as="geometry" />
         </mxCell>
         <mxCell id="t_nv_c6" parent="t_nv" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontSize=16;html=1;" value="[FK] ma_phong_ban : VARCHAR(20) NOT NULL" vertex="1">
@@ -255,8 +255,8 @@
         <mxCell id="t_lg_c7" parent="t_lg" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;html=1;" value="tong_luong : DECIMAL(14,2) NOT NULL (&amp;gt;=0)" vertex="1">
           <mxGeometry height="26" width="446" y="194" as="geometry" />
         </mxCell>
-        <mxCell id="pdm_prog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=14;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#334155;fontSize=16;" value="&lt;b&gt;Đối tượng vật lý đi kèm trong MySQL (schema.sql):&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Function:&lt;/b&gt; fn_so_nam_lam_viec(p_ma_nv)&lt;br&gt;• &lt;b&gt;Triggers:&lt;/b&gt; trg_hop_dong_nghi_viec_insert, trg_hop_dong_nghi_viec_update&lt;br&gt;• &lt;b&gt;Procedures:&lt;/b&gt; sp_nv_theo_phong_ban(p_ten_phong_ban), sp_thong_ke_luong(p_nam, p_ma_phong_ban)" vertex="1">
-          <mxGeometry height="110" width="540" x="495" y="537" as="geometry" />
+        <mxCell id="pdm_prog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=14;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#334155;fontSize=16;" value="&lt;b&gt;Đối tượng vật lý đi kèm trong MySQL (schema.sql):&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Functions:&lt;/b&gt; fn_so_nam_lam_viec(p_ma_nv), fn_tinh_tong_luong(p_ma_cham_cong, p_luong_can_ban, p_phu_cap)&lt;br&gt;• &lt;b&gt;Triggers:&lt;/b&gt; trg_hop_dong_nghi_viec_insert, trg_hop_dong_nghi_viec_update&lt;br&gt;• &lt;b&gt;Procedures:&lt;/b&gt; sp_nv_theo_phong_ban(p_ten_phong_ban), sp_thong_ke_luong(p_nam, p_ma_phong_ban)" vertex="1">
+          <mxGeometry height="135" width="560" x="485" y="537" as="geometry" />
         </mxCell>
         <mxCell id="fk_nv_pb" edge="1" parent="1" source="t_pb_c1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=ERmandOne;startFill=0;endArrow=ERzeroToMany;endFill=0;strokeWidth=1.5;strokeColor=#2563EB;fontSize=16;labelBackgroundColor=#FFFFFF;" target="t_nv_c6" value="fk_nv_phong_ban&#xa;(RESTRICT)">
           <mxGeometry relative="1" as="geometry" />

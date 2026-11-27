@@ -56,9 +56,9 @@ function validateEmployeePayload(body) {
   const ten_nhan_vien = parseRequiredText(body?.ten_nhan_vien, 'Họ và tên nhân viên', 100);
   const ngay_sinh = parseIsoDate(body?.ngay_sinh, 'Ngày sinh');
   const dia_chi = parseRequiredText(body?.dia_chi, 'Địa chỉ', 255);
-  const so_dien_thoai = parseRequiredText(body?.so_dien_thoai, 'Số điện thoại', 15);
-  if (!/^[0-9]{9,15}$/.test(so_dien_thoai)) {
-    throw httpError(400, 'Số điện thoại phải gồm từ 9 đến 15 chữ số');
+  const so_dien_thoai = parseRequiredText(body?.so_dien_thoai, 'Số điện thoại');
+  if (!/^[0-9]{10,11}$/.test(so_dien_thoai)) {
+    throw httpError(400, 'Số điện thoại phải gồm từ 10 đến 11 chữ số');
   }
   const ma_phong_ban = parseCode(body?.ma_phong_ban, 'Phòng ban');
   const ma_chuc_vu = parseCode(body?.ma_chuc_vu, 'Chức vụ');

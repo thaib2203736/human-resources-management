@@ -5,12 +5,14 @@ import { createStatisticsRouter } from '../src/routes/statistics.js';
 import { createApp } from '../src/index.js';
 import { HR_TOKEN, buildTestApp, withServer } from './helpers.js';
 
-test('salaries router computes authoritative tong_luong and validates inputs', async () => {
+test('salaries router computes authoritative tong_luong via fn_tinh_tong_luong and validates inputs', async () => {
   let insertedParams = null;
+  let fnParams = null;
   const mockQuery = async (sql, params) => {
-    if (sql.includes('FROM cham_cong cc') && sql.includes('WHERE cc.ma_cham_cong = ?')) {
-      if (params[0] === 'CC_MISSING') return [];
-      return [{ so_ngay_lam_viec: 24, he_so_luong: '1.60' }];
+    if (sql.includes('fn_tinh_tong_luong')) {
+      fnParams = params;
+      if (params[0] === 'CC_MISSING') return [{ tong_luong: null }];
+      return [{ tong_luong: '12815385.00' }];
     }
     if (sql.startsWith('INSERT INTO luong')) {
       if (params[0] === 'L_DUP') {
@@ -64,9 +66,24 @@ test('salaries router computes authoritative tong_luong and validates inputs', a
       },
     });
     assert.equal(created.status, 201);
+    assert.deepEqual(fnParams, ['CC02', 8000000, 1000000]);
     assert.equal(insertedParams[6], 12815385);
     assert.equal(created.data.tong_luong, 12815385);
     assert.equal(typeof created.data.luong_can_ban, 'number');
+
+    const missingAttendance = await req('/api/v1/salaries', {
+      method: 'POST',
+      token: HR_TOKEN,
+      body: {
+        ma_luong: 'L08',
+        ma_cham_cong: 'CC_MISSING',
+        thang_tinh_luong: 10,
+        nam_tinh_luong: 2026,
+        luong_can_ban: 8000000,
+        phu_cap: 0,
+      },
+    });
+    assert.equal(missingAttendance.status, 400);
 
     const badMonth = await req('/api/v1/salaries', {
       method: 'POST',

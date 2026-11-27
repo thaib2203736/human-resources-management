@@ -111,16 +111,10 @@ test('attendance router validates day sum <= 31 and recalculates linked salary i
   const mockWithTransaction = async (fn) => {
     const q = async (sql, params) => {
       txCalls.push({ sql, params });
-      if (sql.startsWith('UPDATE cham_cong')) {
+      if (sql.trimStart().startsWith('UPDATE cham_cong')) {
         return { affectedRows: 1 };
       }
-      if (sql.includes('FROM luong') && sql.includes('WHERE ma_cham_cong = ?')) {
-        return [{ ma_luong: 'L02', luong_can_ban: '8000000', phu_cap: '1000000' }];
-      }
-      if (sql.includes('FROM nhan_vien nv') && sql.includes('JOIN chuc_vu cv')) {
-        return [{ he_so_luong: '1.60' }];
-      }
-      if (sql.startsWith('UPDATE luong')) {
+      if (sql.trimStart().startsWith('UPDATE luong')) {
         return { affectedRows: 1 };
       }
       return [];
@@ -158,9 +152,10 @@ test('attendance router validates day sum <= 31 and recalculates linked salary i
       },
     });
     assert.equal(updated.status, 200);
-    const salaryUpdate = txCalls.find((c) => c.sql.startsWith('UPDATE luong'));
+    const salaryUpdate = txCalls.find((c) => c.sql.trimStart().startsWith('UPDATE luong'));
     assert.ok(salaryUpdate, 'expected linked salary to be recalculated');
-    assert.deepEqual(salaryUpdate.params, [13800000, 'CC02']);
+    assert.match(salaryUpdate.sql, /fn_tinh_tong_luong\s*\(/);
+    assert.deepEqual(salaryUpdate.params, ['CC02']);
   });
 });
 

@@ -524,10 +524,9 @@ export function ContractsPage({ user }) {
             {form.ngay_ket_thuc && (
               <Alert className="border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-200">
                 <AlertTriangle className="size-4 text-amber-600" />
-                <AlertTitle>Cảnh báo Trigger CSDL</AlertTitle>
+                <AlertTitle>Cảnh báo</AlertTitle>
                 <AlertDescription>
-                  Khi điền Ngày kết thúc, trigger MySQL (<code>trg_hop_dong_nghi_viec</code>) sẽ tự
-                  động chuyển trạng thái của nhân viên này sang <strong>Nghỉ việc</strong>. Hãy để
+                  Khi đến ngày kết thúc, trạng thái của nhân viên này sẽ được chuyển sang <strong>Nghỉ việc</strong>. Hãy để
                   trống nếu hợp đồng vẫn đang hiệu lực.
                 </AlertDescription>
               </Alert>

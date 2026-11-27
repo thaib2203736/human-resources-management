@@ -197,7 +197,7 @@ erDiagram
     VARCHAR ten_nhan_vien "VARCHAR(100) NOT NULL"
     DATE ngay_sinh "DATE NOT NULL"
     VARCHAR dia_chi "VARCHAR(255) NOT NULL"
-    VARCHAR so_dien_thoai "VARCHAR(15) NOT NULL"
+    VARCHAR so_dien_thoai "VARCHAR(11) NOT NULL CHECK 10..11 digits"
     VARCHAR ma_phong_ban FK "VARCHAR(20) NOT NULL -> phong_ban"
     VARCHAR ma_chuc_vu FK "VARCHAR(20) NOT NULL -> chuc_vu"
     SMALLINT nam_vao_lam "SMALLINT NOT NULL"
@@ -271,7 +271,7 @@ erDiagram
 | 2 | `ten_nhan_vien` | `VARCHAR(100)` | `NOT NULL` | — | — | Họ và tên nhân viên |
 | 3 | `ngay_sinh` | `DATE` | `NOT NULL` | — | — | Ngày tháng năm sinh |
 | 4 | `dia_chi` | `VARCHAR(255)` | `NOT NULL` | — | — | Địa chỉ liên hệ |
-| 5 | `so_dien_thoai` | `VARCHAR(15)` | `NOT NULL` | — | — | Số điện thoại liên lạc |
+| 5 | `so_dien_thoai` | `VARCHAR(11)` | `NOT NULL` | — | `CHECK (so_dien_thoai REGEXP '^[0-9]{10,11}$')` | Số điện thoại liên lạc (10–11 chữ số) |
 | 6 | `ma_phong_ban` | `VARCHAR(20)` | `NOT NULL` | — | `FK -> phong_ban(ma_phong_ban)` | Mã phòng ban trực thuộc |
 | 7 | `ma_chuc_vu` | `VARCHAR(20)` | `NOT NULL` | — | `FK -> chuc_vu(ma_chuc_vu)` | Mã chức vụ đảm nhận |
 | 8 | `nam_vao_lam` | `SMALLINT` | `NOT NULL` | — | — | Năm bắt đầu làm việc |
@@ -331,6 +331,7 @@ erDiagram
 | Loại đối tượng | Tên đối tượng | Tham số / Sự kiện | Chức năng vật lý |
 | :--- | :--- | :--- | :--- |
 | **Function** | `fn_so_nam_lam_viec` | `(p_ma_nv VARCHAR(20)) RETURNS INT` | Tính thâm niên `GREATEST(YEAR(CURDATE()) - nam_vao_lam, 0)` |
+| **Function** | `fn_tinh_tong_luong` | `(p_ma_cham_cong VARCHAR(20), p_luong_can_ban DECIMAL(12,2), p_phu_cap DECIMAL(12,2)) RETURNS DECIMAL(14,2)` | Tính tổng lương thực nhận theo ngày công, hệ số lương chức vụ, lương căn bản và phụ cấp |
 | **Trigger** | `trg_hop_dong_nghi_viec_insert` | `AFTER INSERT ON hop_dong` | Tự chuyển `nhan_vien.trang_thai = 'Nghỉ việc'` nếu `NEW.ngay_ket_thuc IS NOT NULL` |
 | **Trigger** | `trg_hop_dong_nghi_viec_update` | `AFTER UPDATE ON hop_dong` | Tự chuyển `nhan_vien.trang_thai = 'Nghỉ việc'` khi cập nhật mới `ngay_ket_thuc` |
 | **Stored Procedure** | `sp_nv_theo_phong_ban` | `(IN p_ten_phong_ban VARCHAR(100))` | Kết bảng `nhan_vien`, `phong_ban`, `chuc_vu` kèm `fn_so_nam_lam_viec` lọc theo tên phòng ban |

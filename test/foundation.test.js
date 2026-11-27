@@ -209,3 +209,8 @@ test('db/index.js and auth.js load env.js before reading process.env in ESM', ()
   assert.match(dbSrc, /^import '\.\.\/env\.js';/);
   assert.match(authSrc, /^import '\.\/env\.js';/);
 });
+
+test('schema.sql defines fn_tinh_tong_luong stored function', () => {
+  const schemaSrc = fs.readFileSync(new URL('../src/db/schema.sql', import.meta.url), 'utf8');
+  assert.match(schemaSrc, /CREATE FUNCTION fn_tinh_tong_luong\s*\(/);
+});

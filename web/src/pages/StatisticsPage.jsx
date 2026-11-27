@@ -269,7 +269,7 @@ export function StatisticsPage() {
         <CardHeader>
           <CardTitle>Biểu đồ phân bổ lương theo phòng ban</CardTitle>
           <CardDescription>
-            Dữ liệu tổng hợp trực tiếp từ thủ tục lưu trữ <code>sp_thong_ke_luong</code>
+            Biểu đồ trực quan so sánh tổng quỹ lương và lương trung bình của các phòng ban.
           </CardDescription>
         </CardHeader>
         <CardContent>

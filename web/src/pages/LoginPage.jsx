@@ -64,7 +64,7 @@ export function LoginPage({ onSuccess }) {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="admin hoặc hr"
+                placeholder="Tên đăng nhập"
               />
             </div>
 

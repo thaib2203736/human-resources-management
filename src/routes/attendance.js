@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { query as defaultQuery, withTransaction as defaultWithTransaction } from '../db/index.js';
 import { requireAuth, requireRole } from '../auth.js';
 import {
-  computeTotalSalary,
   httpError,
   mapDbError,
   parseCode,
@@ -153,32 +152,12 @@ export function createAttendanceRouter({
           throw httpError(404, 'Không tìm thấy bản ghi chấm công');
         }
 
-        const salaryRows = await q(
-          'SELECT ma_luong, luong_can_ban, phu_cap FROM luong WHERE ma_cham_cong = ? LIMIT 1',
+        await q(
+          `UPDATE luong
+           SET tong_luong = fn_tinh_tong_luong(ma_cham_cong, luong_can_ban, phu_cap)
+           WHERE ma_cham_cong = ?`,
           [ma_cham_cong]
         );
-        if (salaryRows[0]) {
-          const empRows = await q(
-            `SELECT cv.he_so_luong
-             FROM nhan_vien nv
-             JOIN chuc_vu cv ON nv.ma_chuc_vu = cv.ma_chuc_vu
-             WHERE nv.ma_nhan_vien = ?
-             LIMIT 1`,
-            [data.ma_nhan_vien]
-          );
-          if (empRows[0]) {
-            const newTotal = computeTotalSalary({
-              luong_can_ban: salaryRows[0].luong_can_ban,
-              he_so_luong: empRows[0].he_so_luong,
-              so_ngay_lam_viec: data.so_ngay_lam_viec,
-              phu_cap: salaryRows[0].phu_cap,
-            });
-            await q('UPDATE luong SET tong_luong = ? WHERE ma_cham_cong = ?', [
-              newTotal,
-              ma_cham_cong,
-            ]);
-          }
-        }
       });
 
       const updated = await fetchOne(ma_cham_cong);

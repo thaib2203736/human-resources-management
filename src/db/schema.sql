@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS nhan_vien (
   ten_nhan_vien VARCHAR(100) NOT NULL,
   ngay_sinh DATE NOT NULL,
   dia_chi VARCHAR(255) NOT NULL,
-  so_dien_thoai VARCHAR(15) NOT NULL,
+  so_dien_thoai VARCHAR(11) NOT NULL CHECK (so_dien_thoai REGEXP '^[0-9]{10,11}$'),
   ma_phong_ban VARCHAR(20) NOT NULL,
   ma_chuc_vu VARCHAR(20) NOT NULL,
   nam_vao_lam SMALLINT NOT NULL,
@@ -170,5 +170,41 @@ BEGIN
   WHERE (p_ma_phong_ban IS NULL OR p_ma_phong_ban = '' OR pb.ma_phong_ban = p_ma_phong_ban)
   GROUP BY pb.ma_phong_ban, pb.ten_phong_ban
   ORDER BY tong_quy_luong DESC, pb.ma_phong_ban;
+END$$
+DELIMITER ;
+
+-- 5. Function: Tính tổng lương thực nhận từ mã chấm công, lương căn bản và phụ cấp
+DROP FUNCTION IF EXISTS fn_tinh_tong_luong;
+DELIMITER $$
+CREATE FUNCTION fn_tinh_tong_luong(
+  p_ma_cham_cong VARCHAR(20),
+  p_luong_can_ban DECIMAL(12, 2),
+  p_phu_cap DECIMAL(12, 2)
+)
+RETURNS DECIMAL(14, 2)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+  DECLARE v_so_ngay TINYINT UNSIGNED DEFAULT NULL;
+  DECLARE v_he_so DECIMAL(5, 2) DEFAULT NULL;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND
+  BEGIN
+    SET v_so_ngay = NULL;
+    SET v_he_so = NULL;
+  END;
+
+  SELECT cc.so_ngay_lam_viec, cv.he_so_luong
+    INTO v_so_ngay, v_he_so
+  FROM cham_cong cc
+  JOIN nhan_vien nv ON cc.ma_nhan_vien = nv.ma_nhan_vien
+  JOIN chuc_vu cv ON nv.ma_chuc_vu = cv.ma_chuc_vu
+  WHERE cc.ma_cham_cong = p_ma_cham_cong
+  LIMIT 1;
+
+  IF v_so_ngay IS NULL OR v_he_so IS NULL THEN
+    RETURN NULL;
+  END IF;
+
+  RETURN ROUND((p_luong_can_ban * v_he_so * v_so_ngay) / 26 + COALESCE(p_phu_cap, 0), 0);
 END$$
 DELIMITER ;
